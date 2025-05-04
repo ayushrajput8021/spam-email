@@ -11,8 +11,8 @@ __pycache__
 
 .env
 
-# Large model files
-backend/model/model.safetensors
+# Model files - exclude entire directory
+backend/model/
 
 # Python
 __pycache__/
