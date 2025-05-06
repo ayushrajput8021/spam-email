@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from transformers import TextClassificationPipeline, AutoTokenizer, AutoModelForSequenceClassification
-import torch
 import os
 import uvicorn
 from pathlib import Path
@@ -18,15 +17,17 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# Using a pre-trained model from Hugging Face instead of local model
-model_name = "mrm8488/bert-tiny-finetuned-sms-spam-detection"
+# Get the absolute path to the saved-model directory
+BASE_DIR = Path(__file__).resolve().parent.parent
+MODEL_DIR = os.path.join(BASE_DIR, "saved-model")
 
 # Load model and tokenizer once during startup
 try:
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForSequenceClassification.from_pretrained(model_name)
+    print(f"Loading model from: {MODEL_DIR}")
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
     pipe = TextClassificationPipeline(model=model, tokenizer=tokenizer)
-    print(f"Model loaded successfully: {model_name}")
+    print("Model loaded successfully from local directory")
 except Exception as e:
     print(f"Error loading model: {e}")
     raise
@@ -66,7 +67,7 @@ async def predict_email(request: EmailRequest):
             "details": {
                 "raw_label": label,
                 "raw_score": float(score),
-                "model_name": model_name,
+                "model_path": str(MODEL_DIR),
                 "content_length": len(request.email_content)
             }
         }
@@ -76,5 +77,4 @@ async def predict_email(request: EmailRequest):
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
 if __name__ == "__main__":
-
     uvicorn.run(app, host="0.0.0.0", port=8000)

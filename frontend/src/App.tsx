@@ -15,7 +15,7 @@ interface PredictionResult {
 	details: {
 		raw_label: string;
 		raw_score: number;
-		model_name: string;
+		model_path: string;
 		content_length: number;
 	};
 }
@@ -165,14 +165,15 @@ Security Team`;
 			</div>
 
 			{error && <div className='error-message'>{error}</div>}
-			{renderResult()}
+			{isLoading && <div className='loading-message'>Analyzing email...</div>}
+			{!isLoading && renderResult()}
 
 			<button
 				onClick={handleCheckEmail}
 				className='check-button'
 				disabled={emailContent.length === 0 || isLoading}
 			>
-				{isLoading ? 'Checking...' : 'Check Email'}
+				{isLoading ? 'Analyzing...' : 'Check Email'}
 			</button>
 
 			<div className='features'>
