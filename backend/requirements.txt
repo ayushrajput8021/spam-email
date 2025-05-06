@@ -1,0 +1,10 @@
+fastapi==0.115.0
+pydantic==2.7.1
+uvicorn==0.27.1
+# Use CPU only version of ONNX Runtime for smaller size
+onnxruntime==1.17.0
+# Only need tokenizer from transformers, not the full package
+transformers==4.38.0
+# Minimal dependencies
+numpy==1.26.0
+safetensors==0.4.2
