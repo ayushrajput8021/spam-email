@@ -1,42 +1,493 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
+	--primary-color: #4461f2;
+	--primary-hover: #3553e0;
+	--secondary-color: #7c46f2;
+	--light-gray: #f7f9fc;
+	--medium-gray: #e6e8ed;
+	--text-color: #333;
+	--text-secondary: #6b7280;
+	--border-color: #e2e8f0;
+	--box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+	--transition: all 0.2s ease;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 1.5rem;
+	padding-bottom: 4rem; /* Add space for fixed help button */
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		'Helvetica Neue', sans-serif;
+	color: var(--text-color);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+h1 {
+	font-size: 2.25rem;
+	font-weight: 700;
+	margin-bottom: 0.75rem;
+	color: #333;
 }
 
-.card {
-  padding: 2em;
+.description {
+	font-size: 1rem;
+	max-width: 600px;
+	margin-bottom: 1.5rem;
+	color: var(--text-secondary);
+	line-height: 1.4;
 }
 
-.read-the-docs {
-  color: #888;
+.email-input-container {
+	position: relative;
+	width: 100%;
+	max-width: 700px;
+	margin-bottom: 0.75rem;
+}
+
+.email-input {
+	width: 100%;
+	height: 150px;
+	padding: 1rem;
+	border: 1px solid var(--border-color);
+	border-radius: 0.5rem;
+	resize: none;
+	font-family: inherit;
+	font-size: 1rem;
+	line-height: 1.5;
+	outline: none;
+	transition: border-color 0.2s ease;
+}
+
+.email-input:focus {
+	border-color: var(--primary-color);
+	box-shadow: 0 0 0 2px rgba(68, 97, 242, 0.1);
+}
+
+.email-input::placeholder {
+	color: #bdc3cf;
+}
+
+.clear-button {
+	position: absolute;
+	top: 0.75rem;
+	right: 0.75rem;
+	background: #e2e8f0;
+	color: #64748b;
+	border: none;
+	border-radius: 50%;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.9rem;
+	cursor: pointer;
+	transition: var(--transition);
+	padding: 0;
+}
+
+.clear-button:hover {
+	background: #cbd5e1;
+}
+
+.counter-row {
+	width: 100%;
+	max-width: 700px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	font-size: 0.875rem;
+	color: var(--text-secondary);
+}
+
+.result {
+	width: 100%;
+	max-width: 700px;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	margin-bottom: 1rem;
+	text-align: left;
+	animation: fadeIn 0.3s ease-in-out;
+}
+
+.result h3 {
+	margin-bottom: 0.5rem;
+	font-size: 1.25rem;
+}
+
+.result.spam {
+	background-color: #fee2e2;
+	border: 1px solid #ef4444;
+	color: #b91c1c;
+}
+
+.result.safe {
+	background-color: #dcfce7;
+	border: 1px solid #22c55e;
+	color: #166534;
+}
+
+.result p {
+	margin-bottom: 0.5rem;
+}
+
+.result-detail {
+	font-size: 0.85rem;
+	margin-top: 0.5rem;
+}
+
+.error-message {
+	width: 100%;
+	max-width: 700px;
+	padding: 0.75rem;
+	background-color: #fee2e2;
+	border: 1px solid #ef4444;
+	color: #b91c1c;
+	border-radius: 0.5rem;
+	margin-bottom: 1rem;
+	font-size: 0.875rem;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.sample-button {
+	background: transparent;
+	border: none;
+	color: var(--primary-color);
+	display: flex;
+	align-items: center;
+	gap: 0.375rem;
+	font-size: 0.875rem;
+	cursor: pointer;
+	transition: var(--transition);
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.25rem;
+}
+
+.sample-button:hover {
+	background: rgba(68, 97, 242, 0.05);
+}
+
+.check-button {
+	background-color: var(--primary-color);
+	color: white;
+	border: none;
+	border-radius: 0.375rem;
+	padding: 0.75rem 2rem;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: var(--transition);
+	margin-bottom: 2rem;
+}
+
+.check-button:hover {
+	background-color: var(--primary-hover);
+}
+
+.check-button:disabled {
+	background-color: var(--medium-gray);
+	cursor: not-allowed;
+}
+
+.features {
+	display: flex;
+	justify-content: space-between;
+	gap: 1.5rem;
+	width: 100%;
+	margin-bottom: 2rem;
+}
+
+.feature {
+	flex: 1;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	border-left: 3px solid transparent;
+	transition: var(--transition);
+	text-align: left;
+}
+
+.feature:nth-child(1) {
+	border-left-color: #4461f2;
+}
+
+.feature:nth-child(2) {
+	border-left-color: #22c55e;
+}
+
+.feature:nth-child(3) {
+	border-left-color: var(--secondary-color);
+}
+
+.feature-icon {
+	font-size: 1.25rem;
+	margin-bottom: 0.5rem;
+	display: inline-block;
+}
+
+.feature h3 {
+	font-size: 1rem;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+
+.feature p {
+	font-size: 0.85rem;
+	color: var(--text-secondary);
+	line-height: 1.4;
+}
+
+footer {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.75rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--border-color);
+	margin-top: 1.5rem;
+}
+
+.footer-text {
+	font-size: 0.9rem;
+	color: var(--text-secondary);
+	margin-bottom: 0.25rem;
+}
+
+.social-links {
+	display: flex;
+	gap: 1.25rem;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.social-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
+	background-color: var(--light-gray);
+	color: var(--primary-color);
+	transition: var(--transition);
+	position: relative;
+	overflow: hidden;
+}
+
+.social-link:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.social-link::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: var(--primary-color);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	z-index: 1;
+}
+
+.social-link:hover::before {
+	opacity: 0.1;
+}
+
+.icon {
+	width: 1.25rem;
+	height: 1.25rem;
+	z-index: 2;
+	transition: var(--transition);
+}
+
+.github-icon {
+	fill: #333;
+}
+
+.linkedin-icon {
+	fill: #0077b5;
+}
+
+.twitter-icon {
+	fill: #1da1f2;
+}
+
+.email-icon {
+	fill: #ea4335;
+}
+
+.social-link:hover .icon {
+	transform: scale(1.1);
+}
+
+.help-button {
+	position: fixed;
+	bottom: 1.5rem;
+	right: 1.5rem;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	background-color: var(--primary-color);
+	color: white;
+	font-size: 1.25rem;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	box-shadow: var(--box-shadow);
+	cursor: pointer;
+	transition: var(--transition);
+	z-index: 10;
+}
+
+.help-button:hover {
+	background-color: var(--primary-hover);
+	transform: translateY(-2px);
+	box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Queries for Responsive Design */
+
+/* Tablet */
+@media (max-width: 768px) {
+	.container {
+		padding: 1.25rem;
+	}
+
+	h1 {
+		font-size: 2rem;
+	}
+
+	.description {
+		font-size: 0.9rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.email-input {
+		height: 120px;
+	}
+
+	.features {
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.feature {
+		padding: 0.75rem;
+	}
+
+	.check-button {
+		margin-bottom: 1.5rem;
+	}
+
+	.social-link {
+		width: 2.25rem;
+		height: 2.25rem;
+	}
+
+	.icon {
+		width: 1.125rem;
+		height: 1.125rem;
+	}
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+	.container {
+		padding: 1rem;
+	}
+
+	h1 {
+		font-size: 1.75rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.description {
+		font-size: 0.85rem;
+		margin-bottom: 1rem;
+	}
+
+	.email-input {
+		height: 100px;
+		padding: 0.75rem;
+	}
+
+	.counter-row {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+
+	.sample-button {
+		margin-left: auto;
+	}
+
+	.check-button {
+		width: 100%;
+		padding: 0.75rem 1rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.feature h3 {
+		font-size: 0.95rem;
+	}
+
+	.feature p {
+		font-size: 0.8rem;
+	}
+
+	.result h3 {
+		font-size: 1.1rem;
+	}
+
+	.social-links {
+		gap: 1rem;
+	}
+
+	.social-link {
+		width: 2rem;
+		height: 2rem;
+	}
+
+	.icon {
+		width: 1rem;
+		height: 1rem;
+	}
+
+	.help-button {
+		bottom: 1rem;
+		right: 1rem;
+		width: 2.5rem;
+		height: 2.5rem;
+		font-size: 1rem;
+	}
+}
+
+/* Small mobile */
+@media (max-width: 320px) {
+	h1 {
+		font-size: 1.5rem;
+	}
+
+	.email-input {
+		height: 80px;
+	}
 }
