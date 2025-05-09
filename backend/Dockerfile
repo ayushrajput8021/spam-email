@@ -20,9 +20,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy requirements first for better layer caching
 COPY requirements.txt .
 
-# Install Python dependencies with --no-deps to avoid extra dependencies
-RUN pip install --no-cache-dir --user --no-deps -r requirements.txt && \
-    pip install --no-cache-dir --user numpy onnxruntime
+# Install Python dependencies and verify uvicorn installation
+RUN pip install --no-cache-dir --user -r requirements.txt && \
+    pip list | grep uvicorn && \
+    ls -la /root/.local/bin/uvicorn
 
 # Final stage with minimal footprint
 FROM python:3.9-slim
@@ -30,20 +31,19 @@ FROM python:3.9-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PATH=/root/.local/bin:$PATH
+    PATH=/home/appuser/.local/bin:$PATH
 
 # Create a non-root user to run the app
 RUN adduser --disabled-password --gecos "" appuser
 
 WORKDIR /app
 
-# Copy only the necessary files from the builder stage
-COPY --from=builder /root/.local /home/appuser/.local
-ENV PATH=/home/appuser/.local/bin:$PATH
+# Copy installed packages from builder (ensure correct permissions)
+COPY --from=builder --chown=appuser:appuser /root/.local /home/appuser/.local
 
 # Copy application code
-COPY app/ /app/app/
-COPY saved-model/ /app/saved-model/
+COPY --chown=appuser:appuser app/ /app/app/
+COPY --chown=appuser:appuser saved-model/ /app/saved-model/
 
 # Set proper permissions
 RUN chown -R appuser:appuser /app
@@ -52,5 +52,9 @@ USER appuser
 # Expose the API port
 EXPOSE 8000
 
+# Memory optimization for Python
+ENV PYTHONMALLOC=malloc \
+    PYTHONVM_STAT_INTERVAL=7200
+
 # Command to run the application
-CMD ["python", "app/main.py"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

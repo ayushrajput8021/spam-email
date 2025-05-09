@@ -24,10 +24,21 @@ MODEL_DIR = os.path.join(BASE_DIR, "saved-model")
 # Load model and tokenizer once during startup
 try:
     print(f"Loading model from: {MODEL_DIR}")
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
-    model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+    try:
+        # Try to load from local directory first
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+        model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+        print("Model and tokenizer loaded successfully from local directory")
+    except Exception as local_error:
+        print(f"Error loading from local directory: {local_error}")
+        print("Falling back to loading tokenizer from Hugging Face and model from local directory")
+        # Load tokenizer from HuggingFace and model from local saved files
+        tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+        model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+        print("Successfully loaded tokenizer from Hugging Face and model from local directory")
+
     pipe = TextClassificationPipeline(model=model, tokenizer=tokenizer)
-    print("Model loaded successfully from local directory")
+    print("TextClassificationPipeline created successfully")
 except Exception as e:
     print(f"Error loading model: {e}")
     raise
@@ -77,4 +88,4 @@ async def predict_email(request: EmailRequest):
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)
