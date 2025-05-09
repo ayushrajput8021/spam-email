@@ -53,3 +53,8 @@ ENV/
 *.swo
 
 backend/saved-model/model.safetensors
+
+# Environment variables
+.env/*
+.env.dev
+.env.prod

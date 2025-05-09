@@ -60,13 +60,16 @@ function App() {
 		setResult(null);
 
 		try {
-			const response = await fetch('http://localhost:8000/predict', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ email_content: emailContent }),
-			});
+			const response = await fetch(
+				import.meta.env.VITE_SERVER_URL + '/predict',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ email_content: emailContent }),
+				}
+			);
 
 			if (!response.ok) {
 				throw new Error(`Error: ${response.statusText}`);
