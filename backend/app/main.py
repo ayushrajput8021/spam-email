@@ -20,23 +20,40 @@ app.add_middleware(
 # Get the absolute path to the saved-model directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_DIR = os.path.join(BASE_DIR, "saved-model")
+MODEL_HF_ID = "distilbert-base-uncased"  # Fallback model ID from HuggingFace
 
 # Load model and tokenizer once during startup
 try:
     print(f"Loading model from: {MODEL_DIR}")
+
+    # Strategy 1: Try to load both tokenizer and model from local directory
     try:
-        # Try to load from local directory first
         tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
         model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
-        print("Model and tokenizer loaded successfully from local directory")
+        print("SUCCESS: Model and tokenizer loaded successfully from local directory")
     except Exception as local_error:
-        print(f"Error loading from local directory: {local_error}")
-        print("Falling back to loading tokenizer from Hugging Face and model from local directory")
-        # Load tokenizer from HuggingFace and model from local saved files
-        tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
-        model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
-        print("Successfully loaded tokenizer from Hugging Face and model from local directory")
+        print(f"PARTIAL FAILURE: Error loading from local directory: {local_error}")
 
+        # Strategy 2: Try loading tokenizer from HuggingFace and model from local directory
+        try:
+            print(f"Trying fallback strategy: tokenizer from HuggingFace ({MODEL_HF_ID}) and model from local")
+            tokenizer = AutoTokenizer.from_pretrained(MODEL_HF_ID)
+            model = AutoModelForSequenceClassification.from_pretrained(MODEL_DIR)
+            print("SUCCESS: Loaded tokenizer from HuggingFace and model from local directory")
+        except Exception as mixed_error:
+            print(f"PARTIAL FAILURE: Mixed loading strategy failed: {mixed_error}")
+
+            # Strategy 3: Full fallback to HuggingFace for both
+            try:
+                print(f"Trying complete fallback: loading both tokenizer and model from HuggingFace ({MODEL_HF_ID})")
+                tokenizer = AutoTokenizer.from_pretrained(MODEL_HF_ID)
+                model = AutoModelForSequenceClassification.from_pretrained(MODEL_HF_ID)
+                print("SUCCESS: Loaded both tokenizer and model from HuggingFace")
+            except Exception as hf_error:
+                print(f"COMPLETE FAILURE: All loading strategies failed. Last error: {hf_error}")
+                raise hf_error
+
+    # Create the classification pipeline
     pipe = TextClassificationPipeline(model=model, tokenizer=tokenizer)
     print("TextClassificationPipeline created successfully")
 except Exception as e:
